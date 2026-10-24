@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="vi"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TripMate AI – Đi đúng gu, chi đúng kế hoạch</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;700&family=Be+Vietnam+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--g:#183F32;--s:#A8B59A;--c:#F5F0DF;--w:#FFFCF5;--p:#F4D3D8;--pd:#9b3b4b;--t:#1d2b25;--m:#5d6b62;--bd:#d9d2bb;--warn:#a96a0f;--bad:#b3261e;--ok:#2f7d5b;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--g:#A8B59A;--c:#14201b;--w:#1b2b24;--t:#efe9d6;--m:#aab5a9;--bd:#33463d;--p:#5a3039;--pd:#f2b8c0;--warn:#e0a84f;--bad:#f08b83;--ok:#6fcf9f}}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--c);color:var(--t);font:400 16px/1.6 "Be Vietnam Pro",system-ui,sans-serif}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;line-height:1.2;margin:0 0 .5em}
+button,input,select,textarea{font:inherit;color:inherit}
+.wrap{max-width:1100px;margin:0 auto;padding:0 18px}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:var(--w);border-bottom:1px solid var(--bd)}
+nav .wrap{display:flex;align-items:center;gap:8px;min-height:60px}
+.brand{font:700 20px Fraunces,serif;background:none;border:0;cursor:pointer;color:var(--g);margin-right:auto}
+.links{display:flex;gap:4px}
+.links button{background:none;border:0;padding:8px 12px;border-radius:99px;cursor:pointer;color:var(--m)}
+.links button.on,.links button:hover{background:var(--p);color:var(--t)}
+.burger{display:none;background:none;border:1px solid var(--bd);border-radius:10px;padding:6px 10px;cursor:pointer}
+@media(max-width:760px){.burger{display:block}.links{display:none;position:absolute;top:60px;left:0;right:0;background:var(--w);flex-direction:column;padding:10px 18px;border-bottom:1px solid var(--bd)}.links.open{display:flex}}
+.btn{background:var(--g);color:var(--w);border:1px solid var(--g);border-radius:12px;padding:9px 16px;cursor:pointer;font-weight:500}
+.btn.ghost{background:transparent;color:var(--g)}.btn.sm{padding:5px 11px;font-size:14px}.btn.pink{background:var(--p);border-color:var(--p);color:#4a1d26}
+.btn:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--s);outline-offset:2px}
+.hero{background:linear-gradient(180deg,#f6c9a8 0%,#f4d3d8 38%,#A8B59A 100%);color:#183F32;position:relative;overflow:hidden}
+.hero .wrap{padding-top:64px;padding-bottom:150px;position:relative;z-index:1}
+.hero h1{font-size:clamp(34px,6vw,60px);max-width:14em}.hero p{max-width:34em;font-size:18px}
+.hero svg{position:absolute;bottom:0;left:0;width:100%;height:150px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+section.pg{display:none;padding:34px 0 60px}section.pg.on{display:block}
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+.card{background:var(--w);border:1px solid var(--bd);border-radius:18px;padding:18px;box-shadow:0 2px 10px rgba(24,63,50,.06)}
+.dest{padding:0;overflow:hidden}.dest .art{height:130px}.dest .art svg{width:100%;height:100%;display:block}.dest .b{padding:14px 16px}
+.tag{display:inline-block;font-size:12px;border-radius:99px;padding:2px 9px;background:var(--p);color:#4a1d26;margin-right:4px}
+.tag.g{background:var(--s);color:#183F32}
+.muted{color:var(--m);font-size:14px}
+label{display:block;font-weight:500;font-size:14px;margin-bottom:4px}
+input,select,textarea{width:100%;padding:9px 11px;border:1px solid var(--bd);border-radius:10px;background:var(--w)}
+.f2{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.chips{display:flex;flex-wrap:wrap;gap:8px}.chips label{display:inline-flex;align-items:center;gap:6px;margin:0;font-weight:400;border:1px solid var(--bd);border-radius:99px;padding:5px 12px;cursor:pointer;background:var(--w)}
+.chips input{width:auto}
+.err{color:var(--bad);font-size:14px;margin:8px 0 0;min-height:1em}
+.alert{border-radius:12px;padding:10px 13px;font-size:14px;margin:10px 0}
+.alert.bad{background:#fbe4e1;color:#7a1710}.alert.warn{background:#fbefd2;color:#6d4208}.alert.ok{background:#dcf1e6;color:#14492f}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .alert.bad{background:#4a1f1b;color:#f8c1bb}:root:not([data-theme="light"]) .alert.warn{background:#463414;color:#f3d9a0}:root:not([data-theme="light"]) .alert.ok{background:#17382a;color:#bfeed5}}
+.kv{display:flex;justify-content:space-between;gap:10px;padding:4px 0;border-bottom:1px dashed var(--bd);font-size:15px}
+.big{font:700 28px Fraunces,serif}
+.bar{height:10px;background:var(--bd);border-radius:99px;overflow:hidden}.bar i{display:block;height:100%;background:var(--ok)}.bar i.warn{background:var(--warn)}.bar i.bad{background:var(--bad)}
+.day{margin-top:12px}.slot{padding:6px 0 6px 12px;border-left:3px solid var(--s);margin:8px 0}
+.act{margin:6px 0;font-size:14px}.act .cost{float:right;font-weight:600}.act p{margin:2px 0}
+.hist{display:flex;justify-content:space-between;gap:8px;padding:8px 0;border-bottom:1px solid var(--bd);font-size:14px}.hist.x{opacity:.5;text-decoration:line-through}
+.chat{height:340px;overflow:auto;display:flex;flex-direction:column;gap:8px;padding:6px}
+.msg{max-width:85%;padding:9px 13px;border-radius:14px;font-size:15px}.msg.u{align-self:flex-end;background:var(--g);color:var(--w)}.msg.a{align-self:flex-start;background:var(--p);color:#2b1218}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--g);color:var(--w);padding:10px 18px;border-radius:12px;z-index:50;max-width:92vw}
+.toast.bad{background:var(--bad);color:#fff}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;z-index:40;padding:16px}.box{background:var(--w);border-radius:16px;padding:20px;max-width:420px;width:100%}
+footer{padding:24px 0;color:var(--m);font-size:13px;text-align:center}
+</style></head><body>
+<nav><div class="wrap"><button class="brand" data-a="go" data-v="home">🌿 TripMate AI</button>
+<button class="burger" id="burger" aria-label="Mở menu">☰</button>
+<div class="links" id="links"><button data-a="go" data-v="home">Trang chủ</button><button data-a="go" data-v="kp">Khám phá</button><button data-a="go" data-v="plan">Lập kế hoạch</button><button data-a="go" data-v="trips">Chuyến đi của tôi</button><button data-a="go" data-v="wallet">Ví du lịch</button><button data-a="go" data-v="svc">Dịch vụ và dữ liệu</button><button data-a="go" data-v="chat">Trợ lý AI</button></div></div></nav>
+
+<section class="pg" id="v-home">
+<div class="hero"><div class="wrap"><h1>Đi đúng gu – Chi đúng kế hoạch.</h1><p>Lên lịch trình theo sở thích, dự trù ngân sách thông minh và tận hưởng chuyến đi theo cách của riêng bạn.</p>
+<div class="row"><button class="btn" data-a="go" data-v="plan">Lên kế hoạch ngay</button><button class="btn ghost" data-a="scroll">Khám phá điểm đến</button></div></div>
+<svg viewBox="0 0 1200 150" preserveAspectRatio="none" aria-hidden="true"><circle cx="900" cy="40" r="34" fill="#fff6e0"/><path d="M0 150V90L180 40l160 60 200-70 220 80 180-50 260 60v50z" fill="#6f8a73"/><path d="M0 150V115l220-40 200 50 240-60 260 55 280-35v65z" fill="#183F32"/></svg></div>
+<div class="wrap" style="margin-top:36px"><h2 id="explore">Khám phá điểm đến</h2><p class="muted">Chi phí là ước tính tham khảo cho phong cách Cân bằng, chưa gồm vé đi lại và không phải giá thời gian thực.</p><div class="grid" id="dests"></div>
+<h2 style="margin-top:40px">Bốn việc TripMate AI làm cho bạn</h2><div class="grid">
+<div class="card"><h3>🗺 Lập lịch trình</h3><p class="muted">Sinh lịch trình theo ngày dựa trên điểm đến, ngân sách và sở thích bạn nhập.</p></div>
+<div class="card"><h3>⚖ So sánh 3 phương án</h3><p class="muted">Tiết kiệm, Cân bằng, Trải nghiệm – cùng một bảng chi phí minh bạch.</p></div>
+<div class="card"><h3>👛 Ví ngân sách ảo</h3><p class="muted">Bảy hũ chi tiêu, cảnh báo khi dùng trên 80%. Không giữ hay chuyển tiền thật.</p></div>
+<div class="card"><h3>💬 Trợ lý du lịch</h3><p class="muted">Trả lời dựa trên chuyến đi và số dư thật trong ví của bạn.</p></div></div>
+<h2 style="margin-top:40px">Cách dùng</h2><div class="grid">
+<div class="card"><h3>Bước 1</h3><p>Nhập thông tin chuyến đi và ngân sách.</p></div><div class="card"><h3>Bước 2</h3><p>Xem, so sánh và chọn lịch trình.</p></div><div class="card"><h3>Bước 3</h3><p>Quản lý chi tiêu bằng ví du lịch ảo.</p></div></div></div></section>
+
+<section class="pg" id="v-plan"><div class="wrap"><h2>Lập kế hoạch chuyến đi</h2>
+<form class="card" id="pf" novalidate><span class="tag g">Dữ liệu demo</span> <span class="muted">Các ô đang điền sẵn để thử nhanh, bạn có thể sửa.</span>
+<div class="f2" style="margin-top:12px"><div><label for="from">Điểm xuất phát</label><select id="from"></select></div><div><label for="dest">Điểm đến</label><select id="dest"></select></div>
+<div><label for="s">Ngày khởi hành</label><input type="date" id="s"></div><div><label for="e">Ngày kết thúc</label><input type="date" id="e"></div>
+<div><label for="n">Số người</label><input type="number" id="n" min="1" step="1" value="3"></div><div><label for="bud">Tổng ngân sách (VNĐ)</label><input type="number" id="bud" min="1" step="1000" value="3000000"></div></div>
+<label style="margin-top:14px">Phong cách du lịch</label><div class="chips" id="styles"></div>
+<label style="margin-top:14px">Sở thích</label><div class="chips" id="ints"></div>
+<div class="err" id="perr" role="alert"></div><button class="btn" type="submit" id="gen">Tạo lịch trình</button></form>
+<div id="results"></div></div></section>
+
+<section class="pg" id="v-trips"><div class="wrap"><h2>Chuyến đi của tôi</h2><div id="tlist" class="grid"></div></div></section>
+
+<section class="pg" id="v-wallet"><div class="wrap"><h2>Ví du lịch ảo</h2><div class="alert warn">Đây là ví quản lý ngân sách ảo, không phải ví thanh toán. Website không nhận, giữ hay chuyển tiền thật.</div>
+<div id="wempty"></div><div id="wmain" style="display:none"><label for="wtrip">Chuyến đi</label><select id="wtrip" style="max-width:360px"></select>
+<div id="wsum" class="card" style="margin-top:12px"></div><h3 style="margin-top:22px">Bảy hũ ngân sách</h3><div class="grid" id="wjars"></div>
+<div class="grid" style="margin-top:20px"><form class="card" id="xf"><h3>Thêm khoản chi</h3><label for="xn">Tên khoản chi</label><input id="xn"><label for="xa">Số tiền (VNĐ)</label><input id="xa" type="number" step="1000"><label for="xj">Hũ</label><select id="xj"></select><label for="xd">Ngày chi</label><input id="xd" type="date"><label for="xt">Ghi chú</label><input id="xt"><div class="err" id="xe"></div><button class="btn" type="submit">Ghi khoản chi</button></form>
+<form class="card" id="tf"><h3>Chuyển ngân sách giữa hũ</h3><label for="tfrom">Hũ nguồn</label><select id="tfrom"></select><label for="tto">Hũ nhận</label><select id="tto"></select><label for="ta">Số tiền (VNĐ)</label><input id="ta" type="number" step="1000"><div class="err" id="te"></div><button class="btn" type="submit">Chuyển</button></form></div>
+<h3 style="margin-top:22px">Lịch sử giao dịch</h3><div class="card" id="whist"></div></div></div></section>
+
+<section class="pg" id="v-chat"><div class="wrap"><h2>TripMate AI Assistant</h2><div class="alert warn">Trợ lý demo – Chưa kết nối mô hình AI trực tiếp. Câu trả lời được tính từ chuyến đi và ví hiện có theo quy tắc.</div>
+<div class="card"><div class="chat" id="chat" aria-live="polite"></div><div class="chips" id="sugg" style="margin:10px 0"></div>
+<form class="row" id="cf" style="flex-wrap:nowrap"><input id="cq" placeholder="Hỏi trợ lý về chuyến đi…" aria-label="Câu hỏi"><button class="btn" type="submit" id="cs">Gửi</button></form></div></div></section>
+<section class="pg" id="v-kp"><div class="wrap"><h2>Khám phá 34 tỉnh, thành phố</h2><div class="alert ok">Danh mục theo Nghị quyết 202/2025/QH15 (34 đơn vị cấp tỉnh, hiệu lực từ 1/7/2025). Gõ tên tỉnh cũ hoặc địa danh quen thuộc, ví dụ “Phú Yên”, “Vũng Tàu”, “Hội An”, để biết nay thuộc đâu.</div><div class="card"><label for="kq">Tìm tỉnh, thành phố hoặc địa danh</label><input id="kq" placeholder="Ví dụ: Bình Định, Phú Quốc, Hà Giang…" autocomplete="off"><div class="chips" id="kr" style="margin-top:10px"></div><p class="muted" id="kn" style="margin:8px 0 0"></p></div><div class="grid" id="kg" style="margin-top:16px"></div><p class="muted">Danh sách “địa danh” là phần TripMate tổng hợp để dễ tìm, chưa phải dữ liệu chính thức của nhà nước. Hãy kiểm tra vị trí bằng nút Mở bản đồ. Chưa có đánh giá, giá hay giờ mở cửa ở mục này.</p></div></section>
+<section class="pg" id="v-svc"><div class="wrap"><h2>Dịch vụ và nguồn dữ liệu</h2><div class="alert warn">Thời tiết và tìm địa điểm chỉ chạy khi triển khai trên Netlify. Các nút Google Maps, Google tìm kiếm chỉ mở tab mới; giá, phòng trống và giờ mở cửa do trang đó hiển thị, TripMate không xác nhận.</div><div class="card"><h3>Tìm nhanh cho mọi địa danh Việt Nam</h3><div class="f2"><div><label for="svf">Điểm xuất phát</label><input id="svf" list="vn"></div><div><label for="svt">Điểm đến</label><input id="svt" list="vn"></div></div><datalist id="vn"></datalist><div class="row" id="svl" style="margin-top:12px"></div></div><h3 style="margin-top:26px">Thời tiết điểm đến (Open-Meteo)</h3><div class="card"><div class="row"><select id="wxc" style="max-width:240px" aria-label="Điểm đến"></select><button class="btn sm" data-w="wx">Xem thời tiết</button></div><div id="wxo" style="margin-top:10px"><p class="muted">Chọn điểm đến rồi bấm “Xem thời tiết”. Tính năng này chỉ chạy khi triển khai trên Netlify.</p></div></div>
+<h3 style="margin-top:26px">Tìm địa điểm (Google Places)</h3><div class="card"><div class="f2"><div><label for="plt">Loại</label><select id="plt"><option value="attraction">Điểm du lịch</option><option value="lodging">Khách sạn, homestay, nhà nghỉ</option><option value="restaurant">Nhà hàng, quán ăn</option></select></div><div><label for="plq">Khu vực</label><input id="plq" placeholder="Ví dụ: Hội An" maxlength="80"></div></div><button class="btn sm" data-w="pl" style="margin-top:10px">Tìm</button><div id="plo" style="margin-top:10px"></div></div>
+<h3 style="margin-top:26px">Kiểm kê API và trạng thái thật</h3><div id="sva" class="grid"></div></div></section>
+<footer>TripMate AI · Bản demo chạy trên trình duyệt · Giá là chi phí ước tính, không phải giá thời gian thực.</footer>
+
+<script>
+const $=s=>document.querySelector(s),fmt=n=>Math.round(n).toLocaleString('vi-VN')+' đ',esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const CITY={'Đà Nẵng':[16.05,108.2],'Hà Nội':[21.03,105.85],'TP. Hồ Chí Minh':[10.78,106.7],'Huế':[16.46,107.59],'Hội An':[15.88,108.33],'Đà Lạt':[11.94,108.44],'Nha Trang':[12.24,109.19],'Hà Giang':[22.82,104.98],'Hải Phòng':[20.86,106.68],'Cần Thơ':[10.04,105.78],'Sa Pa':[22.34,103.84],'Ninh Bình':[20.25,105.97]};
+const INT=[['cf','Cà phê'],['nt','Thiên nhiên'],['sea','Biển'],['mt','Núi'],['food','Ẩm thực địa phương'],['cul','Văn hóa và lịch sử'],['shop','Mua sắm'],['chk','Check-in'],['rs','Nghỉ dưỡng'],['out','Hoạt động ngoài trời']];
+const STY={eco:'Tiết kiệm',bal:'Cân bằng',exp:'Trải nghiệm'};
+const DEST={'Đà Lạt':{m:1,d:'Thiên nhiên và cà phê',a:'mt',c:['#cfe3d0','#7da58a']},'Đà Nẵng':{m:1.05,d:'Biển và trải nghiệm đô thị',a:'sea',c:['#f6d9b5','#8fc1c9']},'Hội An':{m:1,d:'Văn hóa và phố cổ',a:'town',c:['#fbe3b0','#e4a96b']},'Huế':{m:.9,d:'Di sản và ẩm thực',a:'town',c:['#e6dcef','#a99bc4']},'Nha Trang':{m:1.1,d:'Biển và nghỉ dưỡng',a:'sea',c:['#d3eef2','#4f9fb5']},'Hà Giang':{m:.85,d:'Núi rừng và khám phá',a:'mt',c:['#dfe7c9','#6f8a5b']},'Hà Nội':{m:1.05,d:'Thủ đô, văn hóa và ẩm thực',a:'town',c:['#f3e3c3','#c98f5e']},'TP. Hồ Chí Minh':{m:1.1,d:'Đô thị sôi động, ăn uống đường phố',a:'town',c:['#f6d5c9','#d08a73']},'Sa Pa':{m:.95,d:'Núi mây và bản làng',a:'mt',c:['#dbe8ef','#7e9db0']},'Ninh Bình':{m:.9,d:'Non nước và di sản',a:'mt',c:['#e3efd5','#86a870']},'Cần Thơ':{m:.9,d:'Sông nước miền Tây',a:'sea',c:['#f7e4b8','#6fa8a0']}};
+const PL={'Đà Lạt':[['Đồi chè Cầu Đất','Săn mây và đồi chè xanh','nt,chk,out'],['Hồ Tuyền Lâm','Chèo thuyền, đi bộ quanh hồ','nt,out'],['Quán cà phê view đồi thông','Cà phê giữa rừng thông','cf,chk'],['Cà phê vườn Cầu Đất','Cà phê bản địa, không gian xanh','cf,nt'],['Chợ Đà Lạt và bánh tráng nướng','Đặc sản đường phố','food,shop'],['Lẩu gà lá é','Món đặc trưng của Đà Lạt','food'],['Dinh Bảo Đại và Crazy House','Kiến trúc và lịch sử','cul,chk']],
+'Đà Nẵng':[['Bãi biển Mỹ Khê','Tắm biển, ngắm bình minh','sea,chk,rs'],['Bán đảo Sơn Trà','Ngắm toàn cảnh biển và rừng','nt,mt,out'],['Cà phê view biển','Cà phê bên bờ Mỹ Khê','cf,sea'],['Cà phê cầu Rồng','Không gian đô thị về đêm','cf,chk'],['Mì Quảng và bánh xèo','Ẩm thực miền Trung','food'],['Chợ Hàn và chợ Cồn','Ăn vặt, mua quà','food,shop'],['Bảo tàng Chăm','Văn hóa Chăm Pa','cul']],
+'Hội An':[['Phố cổ Hội An','Đi bộ, nhà cổ, đèn lồng','cul,chk,shop'],['Làng rau Trà Quế','Đạp xe, làm nông nghiệp','nt,out'],['Biển An Bàng','Tắm biển thư giãn','sea,rs'],['Cà phê nhà cổ','Không gian xưa','cf,cul'],['Cà phê Cộng view sông','Cà phê ngắm sông Hoài','cf,chk'],['Cao lầu và cơm gà','Đặc sản Hội An','food'],['Chợ đêm Nguyễn Hoàng','Đồ ăn vặt và quà lưu niệm','food,shop']],
+'Huế':[['Đại Nội Huế','Di sản cố đô','cul,chk'],['Chùa Thiên Mụ','Chùa cổ bên sông Hương','cul,nt'],['Lăng Tự Đức','Kiến trúc lăng tẩm','cul,nt'],['Cà phê vườn Huế','Cà phê yên tĩnh','cf,nt'],['Cà phê bên sông Hương','Ngắm sông chiều tối','cf,chk'],['Bún bò Huế','Món đặc trưng cố đô','food'],['Bánh bèo, nậm, lọc','Ẩm thực cung đình','food']],
+'Nha Trang':[['Vịnh Nha Trang','Tour đảo, lặn ngắm san hô','sea,out,rs'],['Tháp Bà Ponagar','Di tích Chăm','cul,chk'],['Bãi Dài','Biển vắng, nghỉ ngơi','sea,rs'],['Cà phê view biển','Cà phê đường Trần Phú','cf,sea'],['Cà phê Hòn Chồng','Cà phê ngắm biển và đá','cf,chk'],['Bún sứa và bánh canh chả cá','Hải sản địa phương','food'],['Chợ Đầm','Mua quà, ăn vặt','food,shop']],
+'Hà Giang':[['Đèo Mã Pì Lèng','Cung đèo hùng vĩ','mt,nt,chk,out'],['Cột cờ Lũng Cú','Điểm cực Bắc','mt,cul,chk'],['Sông Nho Quế','Đi thuyền giữa hẻm vực','nt,out'],['Cà phê Mã Pì Lèng','Cà phê ngắm đèo','cf,mt'],['Cà phê phố Đồng Văn','Cà phê phố cổ','cf,cul'],['Thắng cố và thịt trâu gác bếp','Ẩm thực vùng cao','food'],['Chợ phiên Đồng Văn','Chợ vùng cao, đặc sản','food,shop,cul']],
+'Hà Nội':[['Hồ Hoàn Kiếm và phố cổ','Đi bộ, ngắm phố xưa','cul,chk,shop'],['Văn Miếu – Quốc Tử Giám','Di tích giáo dục cổ','cul'],['Hồ Tây','Đạp xe, ngắm hoàng hôn','nt,out,chk'],['Cà phê trứng','Thức uống đặc trưng Hà Nội','cf'],['Cà phê phố cổ','Ban công nhìn phố','cf,chk,cul'],['Phở và bún chả','Món Hà Nội kinh điển','food'],['Chợ Đồng Xuân và phố ẩm thực','Ăn vặt, mua quà','food,shop']],
+'TP. Hồ Chí Minh':[['Dinh Độc Lập','Di tích lịch sử','cul'],['Nhà thờ Đức Bà và Bưu điện','Kiến trúc Pháp','cul,chk'],['Phố đi bộ Nguyễn Huệ','Dạo phố, check-in','chk,shop'],['Cà phê sữa đá vỉa hè','Nhịp sống Sài Gòn','cf'],['Cà phê chung cư cũ','Không gian hoài cổ','cf,chk'],['Cơm tấm và bánh mì','Món đường phố quen thuộc','food'],['Chợ Bến Thành và phố ẩm thực','Ăn vặt, mua quà','food,shop,cul']],
+'Sa Pa':[['Fansipan','Chinh phục nóc nhà Đông Dương','mt,nt,out'],['Bản Cát Cát','Làng dân tộc, ruộng bậc thang','cul,nt'],['Thung lũng Mường Hoa','Ruộng bậc thang, check-in','nt,chk,out'],['Cà phê view núi','Cà phê ngắm mây','cf,mt'],['Cà phê thị trấn','Không gian ấm áp','cf,cul'],['Lẩu cá hồi và thịt nướng','Ẩm thực vùng cao','food'],['Chợ Sa Pa','Đặc sản, thổ cẩm','food,shop,cul']],
+'Ninh Bình':[['Tràng An','Đi thuyền qua hang động','nt,cul,out'],['Tam Cốc – Bích Động','Đi thuyền giữa đồng lúa','nt,out'],['Hang Múa','Leo bậc đá ngắm toàn cảnh','mt,chk,out'],['Cà phê view núi đá','Cà phê giữa non nước','cf,nt'],['Cà phê vườn','Không gian xanh yên tĩnh','cf,chk'],['Cơm cháy và thịt dê núi','Đặc sản Ninh Bình','food'],['Cố đô Hoa Lư','Di tích cố đô','cul']],
+'Cần Thơ':[['Chợ nổi Cái Răng','Chợ trên sông buổi sáng','cul,chk,food'],['Vườn trái cây','Hái và thưởng thức trái cây','nt,out'],['Nhà cổ Bình Thủy','Kiến trúc xưa','cul'],['Cà phê vườn ven sông','Cà phê bên sông','cf,nt'],['Cà phê bến Ninh Kiều','Ngắm sông chiều tối','cf,chk'],['Bánh xèo và lẩu mắm','Món miền Tây','food'],['Chợ đêm Ninh Kiều','Ăn vặt, quà lưu niệm','food,shop']]};
+const JARS=[['move','Di chuyển','🚌'],['stay','Lưu trú','🛏'],['food','Ăn uống','🍜'],['cafe','Cà phê','☕'],['play','Vé tham quan, vui chơi','🎟'],['shop','Mua sắm','🛍'],['rsv','Dự phòng','🛟']];
+const JN=Object.fromEntries(JARS.map(j=>[j[0],j[1]])),SL={sang:'Buổi sáng',trua:'Buổi trưa',chieu:'Buổi chiều',toi:'Buổi tối'};
+let S={trips:[],wallets:{},active:null,inp:null,opts:null,open:{},topen:{}},chat=[];
+try{const r=JSON.parse(localStorage.getItem('tripmate_v1')||'null');if(r)S=Object.assign(S,r)}catch(e){}
+const save=()=>{try{localStorage.setItem('tripmate_v1',JSON.stringify(S))}catch(e){}};
+function toast(m,bad){const t=document.createElement('div');t.className='toast'+(bad?' bad':'');t.textContent=m;t.setAttribute('role','status');document.body.appendChild(t);setTimeout(()=>t.remove(),2800)}
+function modal(h){return new Promise(r=>{const m=document.createElement('div');m.className='ov';m.innerHTML='<div class="box"><form onsubmit="return false">'+h+'</form></div>';document.body.appendChild(m);m.addEventListener('click',e=>{const b=e.target.closest('[data-m]');if(!b)return;const d=Object.fromEntries(new FormData(m.querySelector('form')));m.remove();r(b.dataset.m==='ok'?d:false)})})}
+const ask=q=>modal('<p>'+esc(q)+'</p><div class="row"><button class="btn ghost" data-m="no">Hủy</button><button class="btn" data-m="ok">Xác nhận</button></div>');
+const km=(a,b)=>{const[x,y]=CITY[a],[u,v]=CITY[b],R=6371,r=Math.PI/180,h=Math.sin((u-x)*r/2)**2+Math.cos(x*r)*Math.cos(u*r)*Math.sin((v-y)*r/2)**2;return 2*R*Math.asin(Math.sqrt(h))};
+const r1k=n=>Math.round(n/1000)*1000;
+function build(i,st,v,disc,ov){ov=ov||{};const n=i.people,days=i.days,nights=days-1,rooms=Math.ceil(n/2),D=DEST[i.dest],road=km(i.from,i.dest)*1.3,off={eco:0,bal:1,exp:2}[st],f=1-.12*(disc||0);
+const P={eco:{k:700,stay:250,food:200,play:80,loc:100},bal:{k:1000,stay:500,food:350,play:150,loc:200},exp:{k:1500,stay:1000,food:600,play:350,loc:350}}[st];
+let one,mode;if(st==='eco'){one=road*P.k;mode='Xe khách giường nằm'}else if(st==='bal'){one=road*P.k;mode='Xe limousine'}else if(road>350){one=700000+road*1000;mode='Máy bay + xe đưa đón'}else{one=road*P.k;mode='Ô tô thuê riêng'}
+one=r1k(Math.max(one,50000));const rate=r1k(ov.stay??P.stay*1000*D.m*f),food=r1k(ov.food??P.food*1000*D.m*f),play=P.play*1000*D.m*f,loc=r1k(P.loc*1000*f);
+const pool=PL[i.dest],sc=p=>p[2].split(',').filter(t=>i.ints.includes(t)).length;
+const fp=pool.filter(p=>p[2].includes('food')),cp=pool.filter(p=>p[2].includes('cf')),ap=pool.filter(p=>/nt|sea|mt|cul|shop|chk|rs|out/.test(p[2])&&!/food|cf/.test(p[2])).sort((a,b)=>sc(b)-sc(a));
+const out=[];let sub=0;
+for(let d=1;d<=days;d++){const s={sang:[],trua:[],chieu:[],toi:[]},k=d+off+v,A=(sl,o)=>{o.cost=r1k(o.cost);sub+=o.cost;s[sl].push(o)};
+if(d===1)A('sang',{name:i.from+' → '+i.dest,desc:'Di chuyển lượt đi',act:'Khởi hành sớm, nhận phòng/gửi hành lý',cost:one*n,cat:'move',sc:'p',mode:mode,note:'Giá vé tính cho '+n+' người, chưa gồm đổi giờ/đổi vé'});
+let a=ap[(2*k)%ap.length];A('sang',{name:a[0],desc:a[1],act:'Tham quan, chụp ảnh',cost:play*.5*n,cat:'play',sc:'p',mode:'Xe máy thuê/Grab',note:'Có thể có vé vào cổng'});
+let t=fp[k%fp.length];A('trua',{name:t[0],desc:t[1],act:'Ăn trưa món địa phương',cost:food*.35*n,cat:'food',sc:'p',mode:'Đi bộ/Grab',note:'Ước tính theo mặt bằng giá'});
+a=ap[(2*k+1)%ap.length];A('chieu',{name:a[0],desc:a[1],act:'Khám phá và nghỉ chân',cost:play*.5*n,cat:'play',sc:'p',mode:'Xe máy thuê/Grab',note:'Có thể có vé vào cổng'});
+let c=cp[k%cp.length];A('chieu',{name:c[0],desc:c[1],act:'Uống cà phê, thư giãn',cost:food*.15*n,cat:'cafe',sc:'p',mode:'Đi bộ',note:''});
+A('chieu',{name:'Di chuyển nội tỉnh trong ngày',desc:'Taxi/Grab/thuê xe máy cho cả nhóm',act:'',cost:loc,cat:'other',sc:'g',mode:'Grab/taxi',note:'Chi phí chung của nhóm'});
+t=fp[(k+1)%fp.length];A('toi',{name:t[0],desc:t[1],act:'Ăn tối',cost:food*.5*n,cat:'food',sc:'p',mode:'Đi bộ/Grab',note:''});
+if(d<days)A('toi',{name:'Lưu trú đêm '+d,desc:rooms+' phòng, tối đa 2 người/phòng',act:'Nghỉ ngơi',cost:rate*rooms,cat:'stay',sc:'g',mode:'',note:rooms+' phòng × '+fmt(rate)+' (chi phí nhóm)'});
+if(d===days)A('chieu',{name:i.dest+' → '+i.from,desc:'Di chuyển lượt về',act:'Ra bến/sân bay sớm',cost:one*n,cat:'move',sc:'p',mode:mode,note:'Giá vé tính cho '+n+' người'});
+out.push(s)}
+const dp={sang:[],trua:[],chieu:[],toi:[]};dp.toi.push({name:'Dự phòng 5%',desc:'Phát sinh nhỏ trong chuyến đi',act:'',cost:r1k(sub*.05),cat:'other',sc:'g',mode:'',note:'Chi phí chung của nhóm'});out[days-1].toi.push(dp.toi[0]);
+const raw={move:0,stay:0,food:0,cafe:0,play:0,other:0};out.forEach(s=>Object.values(s).forEach(l=>l.forEach(o=>raw[o.cat]+=o.cost)));
+const total=Object.values(raw).reduce((x,y)=>x+y,0),by={move:raw.move,stay:raw.stay,food:raw.food+raw.cafe,play:raw.play,other:raw.other};
+return{days:out,n:days,nights,raw,by,total,per:total/n,rem:i.budget-total,rate,food,pp:n};}
+const optName=(o,i)=>o.name||i.dest+' '+i.days+'N'+(i.days-1)+'Đ – '+STY[o.style];
+function dHTML(r,i){return r.days.map((d,x)=>'<div class="day"><b>Ngày '+(x+1)+'</b>'+Object.keys(SL).map(k=>d[k].length?'<div class="slot"><span class="muted">'+SL[k]+'</span>'+d[k].map(o=>'<div class="act"><span class="cost">'+fmt(o.cost)+'</span><b>'+esc(o.name)+'</b><p>'+esc(o.desc)+(o.act?' – '+esc(o.act):'')+'</p><span class="muted">'+(o.mode?esc(o.mode)+' · ':'')+(o.sc==='p'?fmt(o.cost/i.people)+'/người · ':'chi phí nhóm · ')+esc(o.note)+' · <a href="'+mapQ(o.name+', '+i.dest)+'" target="_blank" rel="noopener">Mở bản đồ</a></span></div>').join('')+'</div>':'').join('')+'</div>').join('')}
+function costHTML(r,i){const L=[['Di chuyển','move'],['Lưu trú','stay'],['Ăn uống (gồm cà phê)','food'],['Tham quan, vui chơi','play'],['Khoản khác (đi lại nội tỉnh, dự phòng)','other']];
+return L.map(l=>'<div class="kv"><span>'+l[0]+'</span><b>'+fmt(r.by[l[1]])+'</b></div>').join('')+'<div class="kv"><span>Tổng chi phí dự kiến</span><b>'+fmt(r.total)+'</b></div><div class="kv"><span>Bình quân mỗi người</span><b>'+fmt(r.per)+'</b></div>'+(r.rem<0?'<div class="alert bad">Vượt ngân sách '+fmt(-r.rem)+'. Hãy tăng ngân sách, giảm số ngày hoặc thử “Tối ưu chi phí”.</div>':'<div class="alert ok">Ngân sách còn lại '+fmt(r.rem)+'</div>')}
+const EXC='<p class="muted"><b>Đã tính:</b> di chuyển 2 chiều, lưu trú, ăn uống, cà phê, vé tham quan ước tính, đi lại nội tỉnh, dự phòng 5%.<br><b>Chưa tính:</b> mua sắm, bảo hiểm, tiền tip, chi phí cá nhân phát sinh.</p>';
+function renderResults(){const R=$('#results'),i=S.inp;if(!S.opts||!i){R.innerHTML='';return}
+R.innerHTML='<h2 style="margin-top:30px">Ba phương án cho '+esc(i.dest)+'</h2><p class="muted">Tất cả là <b>chi phí ước tính</b>, chưa xác minh với nhà cung cấp. '+i.people+' người · '+i.days+' ngày '+(i.days-1)+' đêm · ngân sách '+fmt(i.budget)+'</p><div class="grid">'+S.opts.map(o=>{const r=build(i,o.style,o.variant,o.disc,o.ov);return'<div class="card"><h3>'+esc(optName(o,i))+'</h3>'+(i.style===o.style?'<span class="tag g">Hợp với phong cách bạn chọn</span>':'')+costHTML(r,i)+EXC+(S.open[o.style]?dHTML(r,i):'')+'<div class="row"><button class="btn sm ghost" data-a="detail" data-v="'+o.style+'">'+(S.open[o.style]?'Ẩn chi tiết':'Xem chi tiết')+'</button><button class="btn sm ghost" data-a="edit" data-v="'+o.style+'">Chỉnh sửa</button><button class="btn sm ghost" data-a="opt" data-v="'+o.style+'">Tối ưu chi phí</button><button class="btn sm ghost" data-a="regen" data-v="'+o.style+'">Tạo lại lịch trình</button><button class="btn sm" data-a="choose" data-v="'+o.style+'">Chọn lịch trình này</button></div></div>'}).join('')+'</div>'}
+function readForm(){const g=id=>$('#'+id).value,e=[],s=g('s'),en=g('e'),n=Number(g('n')),b=Number(g('bud'));
+if(!s||!en||!g('n')||!g('bud'))e.push('Vui lòng điền đủ các trường bắt buộc.');
+if(s&&en&&en<s)e.push('Ngày kết thúc phải bằng hoặc sau ngày khởi hành.');
+if(g('n')&&!(Number.isInteger(n)&&n>0))e.push('Số người phải là số nguyên dương.');
+if(g('bud')&&!(b>0))e.push('Ngân sách phải là số dương.');
+if(g('from')===g('dest'))e.push('Điểm xuất phát và điểm đến cần khác nhau.');
+const days=s&&en?Math.round((new Date(en)-new Date(s))/864e5)+1:0;if(days>14)e.push('Chuyến đi tối đa 14 ngày trong bản demo.');
+return{e,inp:{from:g('from'),dest:g('dest'),start:s,end:en,days,people:n,budget:b,style:(document.querySelector('input[name=sty]:checked')||{}).value||'bal',ints:[...document.querySelectorAll('input[name=int]:checked')].map(x=>x.value)}}}
+const newOpts=()=>['eco','bal','exp'].map(s=>({style:s,variant:0,disc:0,ov:{},name:null}));
+$('#pf').addEventListener('submit',e=>{e.preventDefault();const{e:er,inp}=readForm();$('#perr').textContent=er.join(' ');if(er.length)return;const b=$('#gen');b.disabled=true;b.textContent='Đang tạo…';setTimeout(()=>{S.inp=inp;S.opts=newOpts();S.open={};save();renderResults();b.disabled=false;b.textContent='Tạo lịch trình';toast('Đã tạo ba phương án');$('#results').scrollIntoView({behavior:'smooth'})},500)});
+function water(id){const t=S.trips.find(x=>x.id===id);return t&&S.wallets[id]}
+function mkWallet(t){const i=t.inp,r=build(i,t.opt.style,t.opt.variant,t.opt.disc,t.opt.ov),raw=r.raw,est=r.total,tot=i.budget,base={move:raw.move,stay:raw.stay,food:raw.food,cafe:raw.cafe,play:raw.play,shop:0,rsv:raw.other},k=est>tot?tot/est:1;
+let sum=0;['move','stay','food','cafe','play'].forEach(j=>{base[j]=Math.floor(base[j]*k/1000)*1000;sum+=base[j]});
+if(est<=tot){const left=tot-sum-raw.other;base.shop=Math.floor(left*.4/1000)*1000}else base.rsv=0;
+sum+=base.shop;base.rsv=tot-sum;S.wallets[t.id]={tripId:t.id,total:tot,base,tx:[],scaled:est>tot,est};save()}
+document.addEventListener('click',async e=>{const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a,v=b.dataset.v;
+if(a==='go')go(v);
+else if(a==='scroll')$('#explore').scrollIntoView({behavior:'smooth'});
+else if(a==='pick'){$('#dest').value=v;go('plan')}
+else if(['detail','edit','opt','regen','choose'].includes(a)){const o=S.opts.find(x=>x.style===v),i=S.inp;
+if(a==='detail'){S.open[v]=!S.open[v]}
+else if(a==='opt'){if(o.disc>=3){toast('Đã tối ưu tối đa (giảm 36% lưu trú, ăn uống, vui chơi).',1);return}const before=build(i,v,o.variant,o.disc,o.ov).total;o.ov={};o.disc++;toast('Đã tối ưu: tiết kiệm '+fmt(before-build(i,v,o.variant,o.disc,o.ov).total))}
+else if(a==='regen'){o.variant++;toast('Đã tạo lại với địa điểm khác')}
+else if(a==='edit'){const r=build(i,v,o.variant,o.disc,o.ov),d=await modal('<h3>Chỉnh sửa phương án</h3><label>Tên chuyến đi</label><input name="n" value="'+esc(optName(o,i))+'"><label>Giá phòng mỗi đêm (VNĐ)</label><input name="st" type="number" min="0" value="'+r.rate+'"><label>Ăn uống mỗi người mỗi ngày (VNĐ)</label><input name="fd" type="number" min="0" value="'+r.food+'"><div class="row" style="margin-top:12px"><button class="btn ghost" data-m="no">Hủy</button><button class="btn" data-m="ok">Lưu</button></div>');if(!d)return;if(!(Number(d.st)>=0)||!(Number(d.fd)>=0)||d.st===''||d.fd===''){toast('Giá phải là số không âm.',1);return}o.name=d.n.trim()||null;o.ov={stay:Number(d.st),food:Number(d.fd)};toast('Đã cập nhật phương án')}
+else if(a==='choose'){const t={id:'t'+Date.now(),inp:{...i},opt:{...o,ov:{...o.ov}},status:'Sắp đi',created:new Date().toISOString()};S.trips.push(t);S.active=t.id;save();toast('Đã lưu vào Chuyến đi của tôi');go('trips');return}
+save();renderResults()}
+else if(a==='tdetail'){S.topen[v]=!S.topen[v];renderTrips()}
+else if(a==='tedit'){const t=S.trips.find(x=>x.id===v),hw=!!S.wallets[v],d=await modal('<h3>Chỉnh sửa chuyến đi</h3><label>Tên chuyến đi</label><input name="n" value="'+esc(optName(t.opt,t.inp))+'"><label>Trạng thái</label><select name="s">'+['Sắp đi','Đang đi','Đã xong'].map(x=>'<option'+(x===t.status?' selected':'')+'>'+x+'</option>').join('')+'</select><label>Tổng ngân sách (VNĐ)</label><input name="b" type="number" min="1" value="'+t.inp.budget+'"'+(hw?' disabled':'')+'>'+(hw?'<p class="muted">Đã có ví nên không đổi được ngân sách.</p>':'')+'<div class="row" style="margin-top:12px"><button class="btn ghost" data-m="no">Hủy</button><button class="btn" data-m="ok">Lưu</button></div>');if(!d)return;
+if(!hw){const nb=Number(d.b);if(!(nb>0)){toast('Ngân sách phải là số dương.',1);return}t.inp.budget=nb}t.opt.name=d.n.trim()||null;t.status=d.s;save();renderTrips();toast('Đã cập nhật chuyến đi')}
+else if(a==='tdel'){if(!await ask('Xóa chuyến đi này'+(S.wallets[v]?' và ví ngân sách của nó':'')+'? Không thể hoàn tác.'))return;S.trips=S.trips.filter(x=>x.id!==v);delete S.wallets[v];if(S.active===v)S.active=(S.trips[0]||{}).id||null;save();renderTrips();toast('Đã xóa chuyến đi')}
+else if(a==='twallet'){const t=S.trips.find(x=>x.id===v);if(!S.wallets[v]){mkWallet(t);toast('Đã tạo ví ngân sách')}S.active=v;save();go('wallet')}
+else if(a==='cancel'){const w=cw(),t=w.tx.find(x=>x.id===v);if(!await ask('Hủy khoản chi “'+t.name+'” '+fmt(t.amt)+'? Giao dịch vẫn nằm trong lịch sử và được đánh dấu đã hủy.'))return;t.status='cancelled';t.cancelledAt=new Date().toISOString();save();renderWallet();toast('Đã hủy khoản chi')}
+else if(a==='sg'){ask$(v)}});
+function renderTrips(){const L=$('#tlist');if(!S.trips.length){L.innerHTML='<div class="card"><p>Bạn chưa có chuyến đi nào.</p><button class="btn" data-a="go" data-v="plan">Tạo chuyến đi đầu tiên</button></div>';return}
+L.innerHTML=S.trips.map(t=>{const i=t.inp,r=build(i,t.opt.style,t.opt.variant,t.opt.disc,t.opt.ov);return'<div class="card" style="grid-column:1/-1"><h3>'+esc(optName(t.opt,i))+'</h3><span class="tag g">'+esc(t.status)+'</span><div class="kv"><span>Hành trình</span><b>'+esc(i.from)+' → '+esc(i.dest)+'</b></div><div class="kv"><span>Thời gian</span><b>'+esc(i.start)+' đến '+esc(i.end)+'</b></div><div class="kv"><span>Số người · Phương án</span><b>'+i.people+' · '+STY[t.opt.style]+'</b></div><div class="kv"><span>Tổng ngân sách · Dự toán</span><b>'+fmt(i.budget)+' · '+fmt(r.total)+'</b></div>'+(r.rem<0?'<div class="alert bad">Dự toán vượt ngân sách '+fmt(-r.rem)+'</div>':'')+(S.topen[t.id]?costHTML(r,i)+dHTML(r,i):'')+'<div class="row" style="margin-top:10px"><button class="btn sm ghost" data-a="tdetail" data-v="'+t.id+'">'+(S.topen[t.id]?'Ẩn lịch trình':'Xem lịch trình')+'</button><button class="btn sm ghost" data-a="tedit" data-v="'+t.id+'">Chỉnh sửa</button><button class="btn sm ghost" data-a="tdel" data-v="'+t.id+'">Xóa</button><button class="btn sm" data-a="twallet" data-v="'+t.id+'">'+(S.wallets[t.id]?'Mở ví ngân sách':'Tạo ví ngân sách')+'</button></div></div>'}).join('')}
+const cw=()=>S.wallets[S.active];
+function wst(w){const a={},sp={};JARS.forEach(j=>{a[j[0]]=w.base[j[0]]||0;sp[j[0]]=0});w.tx.forEach(t=>{if(t.status==='cancelled')return;if(t.t==='chi')sp[t.jar]+=t.amt;else{a[t.from]-=t.amt;a[t.to]+=t.amt}});const spent=Object.values(sp).reduce((x,y)=>x+y,0);return{a,sp,bal:Object.fromEntries(JARS.map(j=>[j[0],a[j[0]]-sp[j[0]]])),spent,rem:w.total-spent,pct:w.total>0?spent/w.total*100:null}}
+const stt=(pct,al,sp)=>pct===null?['','Chưa phân bổ']:pct>100?['bad','Vượt ngân sách']:pct>=80?['warn','Sắp hết ngân sách']:['','Bình thường'];
+function renderWallet(){const wt=S.trips.filter(t=>S.wallets[t.id]);if(!wt.length){$('#wmain').style.display='none';$('#wempty').innerHTML='<div class="card"><p>Chưa có ví nào. Hãy chọn một lịch trình rồi bấm “Tạo ví ngân sách” trong Chuyến đi của tôi.</p><button class="btn" data-a="go" data-v="'+(S.trips.length?'trips':'plan')+'">'+(S.trips.length?'Đến Chuyến đi của tôi':'Tạo chuyến đi đầu tiên')+'</button></div>';return}
+$('#wempty').innerHTML='';$('#wmain').style.display='block';if(!wt.find(t=>t.id===S.active))S.active=wt[0].id;
+$('#wtrip').innerHTML=wt.map(t=>'<option value="'+t.id+'"'+(t.id===S.active?' selected':'')+'>'+esc(optName(t.opt,t.inp))+'</option>').join('');
+const w=cw(),s=wst(w),pc=s.pct===null?0:Math.min(100,s.pct),[cl]=stt(s.pct);
+$('#wsum').innerHTML='<div class="row" style="justify-content:space-between"><div><span class="muted">Tổng ngân sách</span><div class="big">'+fmt(w.total)+'</div></div><div><span class="muted">Đã chi</span><div class="big">'+fmt(s.spent)+'</div></div><div><span class="muted">Còn lại</span><div class="big">'+fmt(s.rem)+'</div></div></div><div class="bar" style="margin:12px 0 4px"><i class="'+cl+'" style="width:'+pc+'%"></i></div><span class="muted">'+(s.pct===null?'Ngân sách bằng 0, chưa tính được tỷ lệ.':'Đã dùng '+s.pct.toFixed(1)+'% ngân sách')+'</span>'+(w.scaled?'<div class="alert warn">Dự toán lịch trình ('+fmt(w.est)+') vượt ngân sách, nên các hũ được phân bổ theo tỷ lệ. Hũ nào thiếu tiền hãy chuyển thêm từ hũ khác.</div>':'');
+$('#wjars').innerHTML=JARS.map(j=>{const al=s.a[j[0]],p=al>0?s.sp[j[0]]/al*100:(s.sp[j[0]]>0?101:null),[c,l]=stt(p);return'<div class="card"><b>'+j[2]+' '+j[1]+'</b><div class="kv"><span>Phân bổ</span><span>'+fmt(al)+'</span></div><div class="kv"><span>Đã chi</span><span>'+fmt(s.sp[j[0]])+'</span></div><div class="kv"><span>Số dư</span><b>'+fmt(s.bal[j[0]])+'</b></div><div class="bar" style="margin:8px 0"><i class="'+c+'" style="width:'+Math.min(100,p||0)+'%"></i></div><span class="muted">'+(p===null?'':p.toFixed(0)+'% · ')+l+'</span></div>'}).join('');
+$('#whist').innerHTML=w.tx.length?[...w.tx].reverse().map(t=>t.t==='chi'?'<div class="hist'+(t.status==='cancelled'?' x':'')+'"><span>'+esc(t.date)+' · '+esc(t.name)+' · '+JN[t.jar]+(t.note?' · '+esc(t.note):'')+'<br><span class="muted">Chi tiêu'+(t.status==='cancelled'?' (đã hủy '+new Date(t.cancelledAt).toLocaleString('vi-VN')+')':'')+' · ghi lúc '+new Date(t.at).toLocaleString('vi-VN')+'</span></span><span>'+fmt(t.amt)+(t.status==='cancelled'?'':' <button class="btn sm ghost" data-a="cancel" data-v="'+t.id+'">Hủy</button>')+'</span></div>':'<div class="hist"><span>'+new Date(t.at).toLocaleString('vi-VN')+' · Chuyển '+JN[t.from]+' → '+JN[t.to]+'<br><span class="muted">Chuyển ngân sách</span></span><span>'+fmt(t.amt)+'</span></div>').join(''):'<p class="muted">Chưa có giao dịch. Thêm khoản chi đầu tiên ở biểu mẫu phía trên.</p>'}
+$('#wtrip').addEventListener('change',e=>{S.active=e.target.value;save();renderWallet()});
+$('#xf').addEventListener('submit',e=>{e.preventDefault();const w=cw(),s=wst(w),n=$('#xn').value.trim(),a=Number($('#xa').value),j=$('#xj').value,d=$('#xd').value,E=$('#xe');
+if(!n||!$('#xa').value||!d)return E.textContent='Vui lòng nhập tên, số tiền và ngày chi.';
+if(!(a>0))return E.textContent='Số tiền phải lớn hơn 0.';
+if(a>s.bal[j])return E.textContent='Số tiền vượt số dư hũ '+JN[j]+' (còn '+fmt(s.bal[j])+'). Hãy chuyển thêm ngân sách từ hũ khác trước.';
+E.textContent='';w.tx.push({id:'x'+Date.now(),t:'chi',name:n,amt:a,jar:j,date:d,note:$('#xt').value.trim(),at:new Date().toISOString(),status:'ok'});save();e.target.reset();$('#xd').value=today();renderWallet();toast('Đã ghi khoản chi')});
+$('#tf').addEventListener('submit',e=>{e.preventDefault();const w=cw(),s=wst(w),f=$('#tfrom').value,t=$('#tto').value,a=Number($('#ta').value),E=$('#te');
+if(f===t)return E.textContent='Hai hũ phải khác nhau.';if(!(a>0))return E.textContent='Số tiền chuyển phải lớn hơn 0.';
+if(a>s.bal[f])return E.textContent='Hũ '+JN[f]+' chỉ còn '+fmt(s.bal[f])+', không đủ để chuyển.';
+E.textContent='';w.tx.push({id:'m'+Date.now(),t:'chuyen',from:f,to:t,amt:a,at:new Date().toISOString()});save();e.target.reset();renderWallet();toast('Đã chuyển ngân sách. Tổng ngân sách không đổi.')});
+function ctx(){const t=S.trips.find(x=>x.id===S.active);if(t)return{i:t.inp,o:t.opt,w:S.wallets[t.id]};if(S.inp&&S.opts)return{i:S.inp,o:S.opts.find(x=>x.style==='bal'),w:null};return null}
+function answer(q){const c=ctx(),l=q.toLowerCase(),L=[];
+const T=(i)=>i.dest;const pls=(d,tag)=>PL[d].filter(p=>p[2].includes(tag)).map(p=>'• '+p[0]+' – '+p[1]).join('\n');
+if(/cà phê|cafe|coffee/.test(l)){const d=(Object.keys(PL).find(k=>l.includes(k.toLowerCase())))||(c&&c.i.dest)||'Đà Lạt';return'Quán/khu cà phê gợi ý ở '+d+' (từ dữ liệu có sẵn, chưa kiểm tra giờ mở cửa hay giá):\n'+pls(d,'cf')}
+if(!c)return'Mình chưa có chuyến đi nào để tính. Hãy vào “Lập kế hoạch” tạo lịch trình, rồi quay lại hỏi nhé.';
+const{i,o,w}=c,r=build(i,o.style,o.variant,o.disc,o.ov);
+if(/số dư|còn lại|ngày cuối|đủ/.test(l)){if(!w)return'Chuyến đi này chưa có ví. Hãy bấm “Tạo ví ngân sách” trong Chuyến đi của tôi để mình tính theo số dư thật.';const s=wst(w),ld=r.days[r.days.length-1],lc=Object.values(ld).flat().reduce((x,y)=>x+y.cost,0);
+return'Tiền còn lại trong ví: '+fmt(s.rem)+' trên tổng '+fmt(w.total)+'.\nChi phí dự kiến của ngày cuối theo lịch trình: '+fmt(lc)+' (ước tính, chưa trừ phần đã chi).\n'+(s.rem>=lc?'Số dư tổng hiện đủ cho ngày cuối.':'Số dư tổng KHÔNG đủ cho ngày cuối, thiếu '+fmt(lc-s.rem)+'.')+'\nSố dư từng hũ:\n'+JARS.map(j=>'• '+j[1]+': '+fmt(s.bal[j[0]])).join('\n')+'\nLưu ý: ví theo dõi từng hũ, nên hũ nào cạn vẫn cần chuyển bù.'}
+if(/tiết kiệm|giảm|điều chỉnh|rẻ|500/.test(l)){const eco=build(i,'eco',0,0,{}).by.move,sv=[['Giảm giá phòng 25%',r.by.stay*.25],['Giảm ăn uống 15%',r.by.food*.15],['Giảm chi tiêu vui chơi 15%',r.by.play*.15]];if(o.style!=='eco'&&r.by.move>eco)sv.push(['Đổi sang xe khách giường nằm',r.by.move-eco]);const tot=sv.reduce((x,y)=>x+y[1],0);
+return'Với “'+optName(o,i)+'” (dự toán '+fmt(r.total)+'), các khoản có thể giảm:\n'+sv.map(x=>'• '+x[0]+': ~'+fmt(r1k(x[1]))).join('\n')+'\nTổng tiết kiệm dự kiến: ~'+fmt(r1k(tot))+'.\n'+(tot>=500000?'Đủ để tiết kiệm thêm 500.000 đ.':'Chưa đủ 500.000 đ; cân nhắc rút ngắn 1 ngày.')+'\nBạn có thể bấm “Tối ưu chi phí” ở phương án để áp dụng.'}
+if(/khác biệt|phương án|so sánh/.test(l)){return['eco','bal','exp'].map(s=>{const x=build(i,s,0,0,{});return'• '+STY[s]+': '+fmt(x.total)+' ('+fmt(x.per)+'/người, '+(x.rem<0?'thiếu '+fmt(-x.rem):'còn '+fmt(x.rem))+')'}).join('\n')+'\nTiết kiệm ưu tiên xe khách và phòng rẻ; Trải nghiệm dùng máy bay/xe riêng và hoạt động đặc sắc.'}
+if(/địa điểm|sở thích|gợi ý/.test(l)){const sc=p=>p[2].split(',').filter(t=>i.ints.includes(t)).length;const top=[...PL[i.dest]].sort((a,b)=>sc(b)-sc(a)).slice(0,4);return'Theo sở thích đã chọn ('+(i.ints.map(t=>INT.find(x=>x[0]===t)[1]).join(', ')||'chưa chọn')+') ở '+i.dest+':\n'+top.map(p=>'• '+p[0]+' – '+p[1]).join('\n')}
+return'Mình có thể: gợi ý tiết kiệm, phân tích số dư ví, so sánh 3 phương án, gợi ý địa điểm theo sở thích hoặc quán cà phê. Hãy thử một câu hỏi gợi ý bên trên.'}
+const SG=['Làm sao để tiết kiệm thêm 500.000đ?','Gợi ý quán cà phê đẹp ở Đà Lạt.','Ngân sách còn lại có đủ cho ngày cuối không?','Điều chỉnh lịch trình để giảm chi phí.','Gợi ý địa điểm phù hợp với sở thích của tôi.'];
+function addMsg(c,t){chat.push([c,t]);const el=$('#chat');el.innerHTML=chat.map(m=>'<div class="msg '+m[0]+'">'+esc(m[1]).replace(/\n/g,'<br>')+'</div>').join('');el.scrollTop=el.scrollHeight}
+function ask$(q){q=q.trim();if(!q)return;addMsg('u',q);$('#cq').value='';$('#cs').disabled=true;addMsg('a','Đang xử lý…');setTimeout(()=>{let a;try{a=answer(q)}catch(e){a='Có lỗi khi xử lý câu hỏi. Bạn thử diễn đạt lại nhé.'}chat.pop();addMsg('a',a);$('#cs').disabled=false},500)}
+$('#cf').addEventListener('submit',e=>{e.preventDefault();ask$($('#cq').value)});
+$('#sugg').innerHTML=SG.map(q=>'<button type="button" class="btn sm ghost" data-a="sg" data-v="'+esc(q)+'">'+esc(q)+'</button>').join('');
+function art(d){const D=DEST[d],bg='background:linear-gradient(180deg,'+D.c[0]+','+D.c[1]+')',sh={mt:'<path d="M0 130V80l60-40 50 40 60-60 80 90v20z" fill="#2f5a45"/><path d="M120 130l60-45 70 45z" fill="#183F32"/>',sea:'<circle cx="230" cy="40" r="20" fill="#fff6e0"/><path d="M0 90q40-14 80 0t80 0 80 0 80 0v40H0z" fill="#2c7f8f"/><path d="M0 108q40-12 80 0t80 0 80 0 80 0v22H0z" fill="#183F32"/>',town:'<rect x="30" y="70" width="60" height="60" fill="#b4533c"/><rect x="100" y="55" width="50" height="75" fill="#d7885a"/><rect x="160" y="75" width="70" height="55" fill="#8a3d2b"/><path d="M26 70l34-22 34 22z" fill="#6b2a1c"/><path d="M0 130h300v0z"/>'}[D.a];return'<div class="art" style="'+bg+'"><svg viewBox="0 0 300 130" preserveAspectRatio="xMidYMax slice" aria-hidden="true">'+sh+'</svg></div>'}
+$('#dests').innerHTML=Object.keys(DEST).map(d=>{const D=DEST[d];return'<div class="card dest">'+art(d)+'<div class="b"><h3>'+d+'</h3><p class="muted" style="margin:0 0 6px">'+D.d+'</p><span class="tag">Chi phí ước tính</span><p style="margin:6px 0">~'+fmt(r1k((250+350+150)*1000*D.m))+'/người/ngày <span class="muted">(chưa gồm di chuyển)</span></p><button class="btn sm" data-a="pick" data-v="'+d+'">Lên kế hoạch tới đây</button></div></div>'}).join('');
+const today=(o=0)=>{const d=new Date(Date.now()+o*864e5);return d.toISOString().slice(0,10)};
+$('#from').innerHTML=Object.keys(CITY).map(c=>'<option>'+c+'</option>').join('');$('#dest').innerHTML=Object.keys(DEST).map(c=>'<option>'+c+'</option>').join('');
+$('#from').value='Đà Nẵng';$('#dest').value='Đà Lạt';$('#s').value=today(14);$('#e').value=today(16);
+$('#styles').innerHTML=Object.keys(STY).map(k=>'<label><input type="radio" name="sty" value="'+k+'"'+(k==='bal'?' checked':'')+'> '+STY[k]+'</label>').join('');
+$('#ints').innerHTML=INT.map(x=>'<label><input type="checkbox" name="int" value="'+x[0]+'"'+(['cf','nt','food'].includes(x[0])?' checked':'')+'> '+x[1]+'</label>').join('');
+const jo=JARS.map(j=>'<option value="'+j[0]+'">'+j[1]+'</option>').join('');['#xj','#tfrom','#tto'].forEach(s=>$(s).innerHTML=jo);$('#tto').value='cafe';$('#xd').value=today();
+const mapQ=q=>'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q),mapDir=(a,b)=>'https://www.google.com/maps/dir/?api=1&origin='+encodeURIComponent(a)+'&destination='+encodeURIComponent(b)+'&travelmode=driving',gq=q=>'https://www.google.com/search?q='+encodeURIComponent(q);
+const APIS=[['Bản đồ, địa điểm, chỉ đường (Google Maps Platform)','Chưa thể tích hợp','bad','Cần khóa API và máy chủ. Trang xuất bản này chặn kết nối tới máy chủ khác. Hiện chỉ có liên kết mở Google Maps.'],['Thời tiết (Open-Meteo)','Đã viết code, chưa kiểm thử trên Netlify','warn','Function /api/weather đã viết và kiểm thử với dữ liệu giả lập. Chưa gọi thử Open-Meteo thật. Chỉ chạy trên Netlify, lỗi thì báo lỗi, không hiện số giả.'],['Vé máy bay (Amadeus)','Chưa thể tích hợp','bad','Cần tài khoản đối tác, khóa bí mật phải nằm ở máy chủ. Chưa có chuyến bay hay giá vé nào.'],['Tìm điểm du lịch, lưu trú, ăn uống (Google Places)','Đã viết code, cần khóa API','warn','Function /api/places đã viết, chưa kiểm thử với Google thật. Cần GOOGLE_PLACES_API_KEY. Không có khóa thì hiện hướng dẫn cấu hình.'],['Lịch trình 3 phương án','Chỉ có dữ liệu mẫu','warn','Quy tắc tính trong trình duyệt, 6 điểm đến, giá là ước tính. Chưa dùng AI thật.'],['Ngân sách và ví ảo','Chạy thật, cục bộ','ok','Tính từ giao dịch bạn nhập. Lưu trên thiết bị này, không có tài khoản hay đồng bộ.']];
+function svcLinks(){const f=$('#svf').value.trim()||'Đà Nẵng',t=$('#svt').value.trim()||'Đà Lạt';$('#svl').innerHTML=[['Chỉ đường '+f+' → '+t,mapDir(f,t)],['Khách sạn, homestay ở '+t,mapQ('khách sạn homestay '+t)],['Nhà hàng, quán ăn ở '+t,mapQ('nhà hàng quán ăn '+t)],['Quán cà phê ở '+t,mapQ('quán cà phê '+t)],['Điểm tham quan ở '+t,mapQ('điểm du lịch '+t)],['Thời tiết '+t,gq('thời tiết '+t)],['Vé máy bay '+f+' → '+t,gq('vé máy bay '+f+' đến '+t)],['Vé tàu, xe khách '+f+' → '+t,gq('vé xe khách tàu hỏa '+f+' đến '+t)]].map(l=>'<a class="btn sm ghost" style="text-decoration:none" target="_blank" rel="noopener" href="'+l[1]+'">'+esc(l[0])+'</a>').join('')}
+function renderSvc(){if(!$('#svf').value){$('#vn').innerHTML=[...Object.keys(CITY),'Sa Pa','Phú Quốc','Ninh Bình','Quy Nhơn','Vũng Tàu','Cát Bà','Mũi Né','Côn Đảo'].map(c=>'<option value="'+c+'">').join('');$('#svf').value=(S.inp&&S.inp.from)||'Đà Nẵng';$('#svt').value=(S.inp&&S.inp.dest)||'Đà Lạt';$('#svf').oninput=$('#svt').oninput=svcLinks;$('#sva').innerHTML=APIS.map(a=>'<div class="card"><b>'+a[0]+'</b><div class="alert '+a[2]+'">'+a[1]+'</div><p class="muted">'+a[3]+'</p></div>').join('')}svcLinks()}
+const KP=`Hà Nội|tp|B|||
+Hải Phòng|tp|B|Hải Dương|Cát Bà;Đồ Sơn|
+Quảng Ninh|t|B||Hạ Long;Vân Đồn;Cô Tô|
+Lạng Sơn|t|B||Mẫu Sơn|
+Cao Bằng|t|B||Thác Bản Giốc;Pác Bó|
+Tuyên Quang|t|B|Hà Giang|Đồng Văn;Mã Pì Lèng|Hà Giang
+Lào Cai|t|B|Yên Bái|Sa Pa;Fansipan;Mù Cang Chải|Sa Pa
+Thái Nguyên|t|B|Bắc Kạn|Hồ Ba Bể;Hồ Núi Cốc|
+Phú Thọ|t|B|Vĩnh Phúc;Hòa Bình|Đền Hùng;Tam Đảo;Mai Châu|
+Bắc Ninh|t|B|Bắc Giang|Đền Đô|
+Hưng Yên|t|B|Thái Bình|Phố Hiến|
+Ninh Bình|t|B|Hà Nam;Nam Định|Tràng An;Tam Cốc;Cố đô Hoa Lư|Ninh Bình
+Lai Châu|t|B|||
+Điện Biên|t|B||Điện Biên Phủ|
+Sơn La|t|B||Mộc Châu|
+Thanh Hóa|t|T||Sầm Sơn;Pù Luông;Thành nhà Hồ|
+Nghệ An|t|T||Cửa Lò|
+Hà Tĩnh|t|T||Thiên Cầm|
+Quảng Trị|t|T|Quảng Bình|Phong Nha;Đồng Hới;Thành cổ Quảng Trị|
+Huế|tp|T||Đại Nội;Lăng Cô|Huế
+Đà Nẵng|tp|T|Quảng Nam|Hội An;Mỹ Sơn;Bà Nà Hills;Cù Lao Chàm|Đà Nẵng
+Quảng Ngãi|t|T|Kon Tum|Đảo Lý Sơn;Măng Đen|
+Khánh Hòa|t|T|Ninh Thuận|Nha Trang;Cam Ranh;Vĩnh Hy|Nha Trang
+Gia Lai|t|N|Bình Định|Quy Nhơn;Kỳ Co;Pleiku|
+Đắk Lắk|t|N|Phú Yên|Buôn Ma Thuột;Gành Đá Đĩa;Tuy Hòa|
+Lâm Đồng|t|N|Đắk Nông;Bình Thuận|Đà Lạt;Mũi Né;Phan Thiết|Đà Lạt
+TP. Hồ Chí Minh|tp|D|Bình Dương;Bà Rịa - Vũng Tàu|Vũng Tàu;Côn Đảo;Củ Chi|TP. Hồ Chí Minh
+Đồng Nai|t|D|Bình Phước|Cát Tiên|
+Tây Ninh|t|D|Long An|Núi Bà Đen|
+Cần Thơ|tp|M|Sóc Trăng;Hậu Giang|Chợ nổi Cái Răng;Bến Ninh Kiều|Cần Thơ
+Vĩnh Long|t|M|Bến Tre;Trà Vinh||
+Đồng Tháp|t|M|Tiền Giang|Tràm Chim;Sa Đéc|
+Cà Mau|t|M|Bạc Liêu|Mũi Cà Mau;Bạc Liêu|
+An Giang|t|M|Kiên Giang|Phú Quốc;Châu Đốc;Hà Tiên|`.split('\n').map(l=>{const a=l.split('|');return{n:a[0],t:a[1],r:a[2],o:a[3]?a[3].split(';'):[],k:a[4]?a[4].split(';'):[],d:a[5]||''}});
+const RG={all:'Cả nước',B:'Miền Bắc',T:'Miền Trung',N:'Tây Nguyên',D:'Đông Nam Bộ',M:'Tây Nam Bộ'},nz=s=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').toLowerCase().trim();let kr='all';
+function renderKp(){if(!$('#kg').dataset.i){$('#kg').dataset.i=1;$('#kr').innerHTML=Object.keys(RG).map(k=>'<button type="button" class="btn sm ghost" data-r="'+k+'">'+RG[k]+'</button>').join('');$('#kr').onclick=e=>{const b=e.target.closest('[data-r]');if(b){kr=b.dataset.r;renderKp()}};$('#kq').oninput=renderKp}
+const q=nz($('#kq').value);document.querySelectorAll('#kr button').forEach(b=>b.classList.toggle('pink',b.dataset.r===kr));
+const L=KP.filter(p=>(kr==='all'||p.r===kr)&&(!q||[p.n,...p.o,...p.k].some(x=>nz(x).includes(q))));$('#kn').textContent=L.length+' / '+KP.length+' đơn vị hành chính cấp tỉnh';
+$('#kg').innerHTML=L.length?L.map(p=>{const hit=q&&!nz(p.n).includes(q)?[...p.o,...p.k].find(x=>nz(x).includes(q)):null;return'<div class="card"><h3>'+esc(p.n)+'</h3><span class="tag g">'+(p.t==='tp'?'Thành phố trực thuộc TW':'Tỉnh')+'</span><span class="tag">'+RG[p.r]+'</span>'+(hit?'<div class="alert ok">“'+esc(hit)+'” hiện thuộc '+esc(p.n)+'.</div>':'')+(p.o.length?'<p class="muted">Gộp thêm tỉnh cũ: '+esc(p.o.join(', '))+'</p>':'')+(p.k.length?'<p class="muted">Địa danh: '+esc(p.k.join(', '))+'</p>':'')+'<div class="row"><a class="btn sm ghost" style="text-decoration:none" target="_blank" rel="noopener" href="'+mapQ(p.n+', Việt Nam')+'">Mở bản đồ</a>'+(p.d?'<button class="btn sm" data-a="pick" data-v="'+esc(p.d)+'">Lập kế hoạch</button>':'<span class="muted">Chưa có dữ liệu lịch trình</span>')+'</div></div>'}).join(''):'<div class="card"><p>Không tìm thấy “'+esc($('#kq').value)+'” trong danh mục.</p><a class="btn sm ghost" style="text-decoration:none" target="_blank" rel="noopener" href="'+mapQ($('#kq').value+', Việt Nam')+'">Tìm trên Google Maps</a></div>'}
+$('#wxc').innerHTML=Object.keys(CITY).map(c=>'<option>'+c+'</option>').join('');$('#wxc').value='Đà Lạt';
+const WC={0:'Trời quang',1:'Ít mây',2:'Có mây',3:'Nhiều mây',45:'Sương mù',48:'Sương mù đóng băng',51:'Mưa phùn nhẹ',53:'Mưa phùn',55:'Mưa phùn dày',61:'Mưa nhẹ',63:'Mưa vừa',65:'Mưa to',80:'Mưa rào nhẹ',81:'Mưa rào',82:'Mưa rào rất to',95:'Dông',96:'Dông kèm mưa đá',99:'Dông kèm mưa đá lớn'};
+const fdt=s=>new Date(s).toLocaleString('vi-VN');
+async function api(path){const c=new AbortController(),t=setTimeout(()=>c.abort(),10000);try{const r=await fetch(path,{signal:c.signal});let j=null;try{j=await r.json()}catch(e){}return{ok:r.ok,status:r.status,j}}catch(e){return{ok:false,status:0,j:null}}finally{clearTimeout(t)}}
+const noFn=r=>r.status===404||r.status===0||(!r.j&&r.status>=400);
+async function loadWx(){const o=$('#wxo'),[la,lo]=CITY[$('#wxc').value];o.innerHTML='<p class="muted">Đang tải thời tiết…</p>';const r=await api('/api/weather?lat='+la+'&lon='+lo);
+if(!r.ok||!r.j||!r.j.current||!r.j.daily){o.innerHTML='<div class="alert bad">'+(noFn(r)?'Không gọi được Function thời tiết. Tính năng này chỉ chạy khi triển khai trên Netlify (xem README).':esc((r.j&&r.j.error)||'Không tải được dữ liệu thời tiết.'))+'</div><button class="btn sm ghost" data-w="wx">Thử lại</button>';return}
+const j=r.j,c=j.current,d=j.daily,rain=v=>v==null?'không có dữ liệu':v+'%';
+o.innerHTML='<div class="alert ok">Nguồn: Open-Meteo · tải lúc '+fdt(j.fetchedAt)+'</div><b>Hiện tại</b> <span class="muted">(dữ liệu lúc '+esc(c.time)+')</span><div class="kv"><span>'+esc(WC[c.weather_code]||'Mã thời tiết '+c.weather_code)+'</span><b>'+c.temperature_2m+'°C</b></div><div class="kv"><span>Độ ẩm · gió · lượng mưa</span><span>'+c.relative_humidity_2m+'% · '+c.wind_speed_10m+' km/h · '+c.precipitation+' mm</span></div><b style="display:block;margin-top:10px">Dự báo 7 ngày</b>'+d.time.map((t,i)=>'<div class="kv"><span>'+esc(t)+' · '+esc(WC[d.weather_code[i]]||'Mã '+d.weather_code[i])+'</span><span>'+d.temperature_2m_min[i]+'–'+d.temperature_2m_max[i]+'°C · khả năng mưa '+rain(d.precipitation_probability_max[i])+'</span></div>').join('')}
+async function loadPl(){const q=$('#plq').value.trim(),o=$('#plo');if(q.length<2){o.innerHTML='<div class="alert warn">Nhập khu vực (ít nhất 2 ký tự).</div>';return}o.innerHTML='<p class="muted">Đang tìm…</p>';const r=await api('/api/places?type='+$('#plt').value+'&q='+encodeURIComponent(q));
+if(r.status===503&&r.j&&r.j.configured===false){o.innerHTML='<div class="alert warn">Chưa cấu hình Google Places. Thêm biến môi trường GOOGLE_PLACES_API_KEY trên Netlify (README, mục 4). Trong lúc chờ, hãy dùng các nút Google Maps ở trên.</div>';return}
+if(!r.ok||!r.j){o.innerHTML='<div class="alert bad">'+(noFn(r)?'Không gọi được Function. Tính năng này chỉ chạy khi triển khai trên Netlify.':esc((r.j&&r.j.error)||'Không tải được dữ liệu.'))+'</div>';return}
+const P=r.j.places||[];o.innerHTML=P.length?'<p class="muted">Nguồn: Google Maps Platform · '+fdt(r.j.fetchedAt)+' · TripMate không lưu trữ kết quả</p>'+P.map(p=>'<div class="hist"><span><b>'+esc(p.name)+'</b><br><span class="muted">'+esc(p.address)+(p.rating?' · '+p.rating+'★ ('+p.ratingCount+')':'')+'</span></span><a class="btn sm ghost" style="text-decoration:none" target="_blank" rel="noopener" href="'+esc(p.mapsUri)+'">Mở Maps</a></div>').join(''):'<div class="alert warn">Không tìm thấy kết quả.</div>'}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-w]');if(!b)return;if(b.dataset.w==='wx')loadWx();else if(b.dataset.w==='pl')loadPl()});
+function go(v){if(v==='svc')renderSvc();if(v==='kp')renderKp();document.querySelectorAll('section.pg').forEach(s=>s.classList.toggle('on',s.id==='v-'+v));document.querySelectorAll('.links button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));$('#links').classList.remove('open');if(v==='trips')renderTrips();if(v==='wallet')renderWallet();if(v==='plan')renderResults();window.scrollTo(0,0)}
+$('#burger').addEventListener('click',()=>$('#links').classList.toggle('open'));
+addMsg('a','Xin chào! Mình là TripMate AI Assistant (bản demo theo quy tắc). Hãy chọn một câu hỏi gợi ý hoặc tự nhập câu hỏi.');
+go('home');
+</script></body></html>
